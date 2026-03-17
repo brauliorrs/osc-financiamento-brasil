@@ -1,0 +1,18 @@
+{
+  "title": "Infraestrutura analítica para integração de dados sobre financiamento das OSCs no Brasil",
+  "creators": [
+    {
+      "name": "Braulio Roberto Rangel da Silva",
+      "affiliation": "Instituto Federal da Paraíba"
+    }
+  ],
+  "description": "Pipeline reprodutível em Python para integração de bases de dados sobre financiamento das organizações da sociedade civil no Brasil.",
+  "keywords": [
+    "third sector",
+    "civil society",
+    "open data",
+    "public policy",
+    "Brazil"
+  ],
+  "license": "MIT"
+}

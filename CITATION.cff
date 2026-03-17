@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+title: "Infraestrutura analítica para integração de dados sobre financiamento das OSCs no Brasil"
+message: "Se utilizar este software ou dados, cite o DOI do projeto."
+authors:
+  - family-names: Silva
+    given-names: Braulio Roberto Rangel da
+date-released: 2026
+license: MIT
+repository-code: https://github.com/usuario/osc-financiamento-brasil

@@ -1,9 +1,13 @@
 import pandas as pd
 
+from src.analytics.indicadores import gerar_indicadores_basicos, gerar_indicadores_financiamento
 from src.config import PROCESSED_DIR
 from src.ingestion.mapa_osc import carregar_base_mapa_osc
+from src.ingestion.transferegov import carregar_pagamentos
+from src.ingestion.transferencias_publicas import carregar_transferencias_publicas
+from src.integration.integrar_transferencias import integrar_cadastro_com_transferencias
 from src.processing.padronizacao import padronizar_mapa_osc
-from src.analytics.indicadores import gerar_indicadores_basicos
+from src.processing.padronizacao_transferencias import padronizar_transferencias_publicas
 
 
 def salvar_csv_parquet(df: pd.DataFrame, nome: str) -> None:
@@ -17,27 +21,69 @@ def salvar_csv_parquet(df: pd.DataFrame, nome: str) -> None:
 def main() -> None:
     print("1. Carregando Base Principal do Mapa das OSCs...")
     bruto = carregar_base_mapa_osc()
-
     print(f"Registros brutos: {len(bruto):,}")
     print(f"Colunas brutas: {len(bruto.columns)}")
 
     print("2. Padronizando cadastro mestre...")
     cadastro = padronizar_mapa_osc(bruto)
-
     print(f"Registros padronizados: {len(cadastro):,}")
     print(f"Colunas padronizadas: {len(cadastro.columns)}")
 
     print("3. Salvando cadastro mestre...")
     salvar_csv_parquet(cadastro, "cadastro_mestre_oscs")
 
-    print("4. Gerando indicadores básicos...")
+    print("4. Gerando indicadores basicos do cadastro...")
     indicadores = gerar_indicadores_basicos(cadastro)
-
     for nome, df in indicadores.items():
         salvar_csv_parquet(df, nome)
 
-    print("Pipeline concluído com sucesso.")
-    print(f"Saídas em: {PROCESSED_DIR}")
+    transf = None
+    print("5. Carregando transferencias publicas...")
+    try:
+        transf_raw = carregar_transferencias_publicas()
+    except FileNotFoundError as exc:
+        print(f"5. Fonte opcional ausente: {exc}")
+    else:
+        print(f"Registros de transferencias: {len(transf_raw):,}")
+        print(f"Colunas de transferencias: {len(transf_raw.columns)}")
+
+        print("6. Padronizando transferencias...")
+        transf = padronizar_transferencias_publicas(transf_raw)
+        salvar_csv_parquet(transf, "transferencias_publicas_padronizadas")
+
+        print("7. Integrando cadastro mestre + transferencias...")
+        base_fin = integrar_cadastro_com_transferencias(cadastro, transf)
+        salvar_csv_parquet(base_fin, "base_financiamento_publico_oscs")
+
+    print("8. Carregando pagamentos TransfereGov...")
+    pag = carregar_pagamentos()
+    print(f"Pagamentos: {len(pag):,}")
+    salvar_csv_parquet(pag, "pagamentos_transferegov_padronizados")
+
+    base_fin_transferegov = None
+    if 'cnpj' in pag.columns:
+        print("9. Integrando TransfereGov com cadastro OSC por CNPJ...")
+        base_fin_transferegov = pag.merge(cadastro, on='cnpj', how='left')
+        salvar_csv_parquet(base_fin_transferegov, 'base_financiamento_publico_oscs_transferegov')
+    else:
+        print(
+            "9. Integracao com cadastro OSC nao executada: "
+            "o arquivo de pagamentos nao contem CNPJ do convenente."
+        )
+
+    base_resumo = base_fin_transferegov
+    if base_resumo is None and transf is not None:
+        base_resumo = integrar_cadastro_com_transferencias(cadastro, transf)
+    if base_resumo is None:
+        base_resumo = pag
+
+    print("10. Gerando indicadores de financiamento...")
+    indicadores_fin = gerar_indicadores_financiamento(base_resumo)
+    for nome, df in indicadores_fin.items():
+        salvar_csv_parquet(df, nome)
+
+    print("Pipeline V2 concluido com sucesso.")
+    print(f"Saidas em: {PROCESSED_DIR}")
 
 
 if __name__ == "__main__":

@@ -1,8 +1,11 @@
+import unicodedata
+
 import pandas as pd
 
 
 def normalizar_nome_coluna(col: str) -> str:
     col = str(col).strip().lower()
+    col = unicodedata.normalize("NFKD", col).encode("ascii", "ignore").decode("ascii")
     substituicoes = {
         " ": "_",
         "/": "_",
@@ -15,18 +18,6 @@ def normalizar_nome_coluna(col: str) -> str:
         "{": "",
         "}": "",
         "%": "pct",
-        "ã": "a",
-        "á": "a",
-        "à": "a",
-        "â": "a",
-        "é": "e",
-        "ê": "e",
-        "í": "i",
-        "ó": "o",
-        "ô": "o",
-        "õ": "o",
-        "ú": "u",
-        "ç": "c",
     }
     for k, v in substituicoes.items():
         col = col.replace(k, v)
@@ -81,7 +72,6 @@ def padronizar_mapa_osc(df: pd.DataFrame) -> pd.DataFrame:
         if col:
             base[destino] = df[col]
 
-    # Áreas temáticas
     area_cols = [c for c in df.columns if c.startswith("area_")]
     subarea_cols = [c for c in df.columns if c.startswith("subarea_")]
 

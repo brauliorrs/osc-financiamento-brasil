@@ -1,62 +1,59 @@
-# Financiamento das Organizações da Sociedade Civil no Brasil
-## Integração de bases de dados e infraestrutura analítica reprodutível
+# Financiamento das Organizacoes da Sociedade Civil no Brasil
+## Integracao de bases de dados e infraestrutura analitica reprodutivel
 
-Este repositório contém o pipeline computacional desenvolvido para integrar bases de dados sobre o financiamento das Organizações da Sociedade Civil (OSCs) no Brasil.
+Este repositorio contem o pipeline computacional desenvolvido para integrar bases de dados sobre o financiamento das Organizacoes da Sociedade Civil (OSCs) no Brasil.
 
-O projeto integra informações provenientes de diferentes fontes institucionais, incluindo dados sobre transferências públicas, incentivos fiscais e investimento social privado.
+O projeto integra informacoes provenientes de diferentes fontes institucionais, incluindo dados sobre transferencias publicas, incentivos fiscais e investimento social privado.
 
-O objetivo é construir uma base analítica consolidada capaz de subsidiar análises acadêmicas, relatórios técnicos e visualizações interativas sobre o financiamento do terceiro setor no país.
+O objetivo e construir uma base analitica consolidada capaz de subsidiar analises academicas, relatorios tecnicos e visualizacoes interativas sobre o financiamento do terceiro setor no pais.
 
 ---
 
 # Objetivos do projeto
 
 - integrar bases de dados sobre financiamento das OSCs
-- padronizar e harmonizar variáveis provenientes de diferentes sistemas
-- produzir indicadores territoriais e temáticos de financiamento
-- disponibilizar dashboards interativos para exploração dos dados
-- garantir reprodutibilidade científica do pipeline
+- padronizar e harmonizar variaveis provenientes de diferentes sistemas
+- produzir indicadores territoriais e tematicos de financiamento
+- disponibilizar dashboards interativos para exploracao dos dados
+- garantir reprodutibilidade cientifica do pipeline
 
 ---
 
-# Estrutura do repositório
+# Estrutura do repositorio
+
+```text
 osc-financiamento-brasil/
-│
-├ data/
-│ ├ raw/
-│ ├ interim/
-│ └ processed/
-│
-├ src/
-│ ├ ingestion/
-│ ├ processing/
-│ ├ integration/
-│ ├ analytics/
-│ └ viz/
-│
-├ dashboard/
-│ └ app.py
-│
-├ docs/
-│ ├ metodologia.md
-│ ├ catalogo_de_bases.md
-│ └ arquitetura_pipeline.md
-│
-├ outputs/
-│ ├ tables/
-│ ├ figures/
-│ └ maps/
-│
-├ notebooks/
-│ └ exploracao_dados.ipynb
-│
-├ tests/
-│ └ testes_integridade.py
-│
-├ requirements.txt
-├ README.md
-├ LICENSE
-└ CITATION.cff
+|-- data/
+|   |-- raw/
+|   |-- interim/
+|   `-- processed/
+|-- src/
+|   |-- ingestion/
+|   |-- processing/
+|   |-- integration/
+|   |-- analytics/
+|   `-- viz/
+|-- dashboard/
+|   |-- app.py
+|   `-- data/
+|-- docs/
+|   |-- metodologia.md
+|   |-- catalogo_de_bases.md
+|   `-- arquitetura_pipeline.md
+|-- outputs/
+|   |-- tables/
+|   |-- figures/
+|   `-- maps/
+|-- notebooks/
+|   `-- exploracao_dados.ipynb
+|-- tests/
+|   `-- testes_integridade.py
+|-- requirements.txt
+|-- runtime.txt
+|-- README.md
+|-- LICENSE
+`-- CITATION.cff
+```
 
 ---
 
@@ -64,19 +61,17 @@ osc-financiamento-brasil/
 
 O pipeline segue as seguintes etapas:
 
-1. ingestão de dados de diferentes fontes institucionais  
-2. padronização de variáveis e formatos  
-3. harmonização semântica das categorias analíticas  
-4. integração das bases de dados  
-5. controle de qualidade e validação  
-6. geração de indicadores e análises territoriais  
-7. visualização interativa e dashboards  
+1. ingestao de dados de diferentes fontes institucionais
+2. padronizacao de variaveis e formatos
+3. harmonizacao semantica das categorias analiticas
+4. integracao das bases de dados
+5. controle de qualidade e validacao
+6. geracao de indicadores e analises territoriais
+7. visualizacao interativa e dashboards
 
 ---
 
 # Tecnologias utilizadas
-
-Python
 
 Bibliotecas principais:
 
@@ -89,55 +84,83 @@ Bibliotecas principais:
 
 ---
 
+# Dados e reprodutibilidade
+
+Por padrao, os diretorios `data/raw`, `data/interim` e `data/processed` nao sao versionados no GitHub. Isso significa que o repositorio publico contem o codigo, a documentacao e os metadados do projeto, mas nao inclui automaticamente os arquivos de dados de grande porte utilizados nas analises.
+
+Para reproduzir os resultados localmente, e necessario disponibilizar os insumos em `data/raw/` e executar o pipeline.
+
+Entradas atualmente utilizadas no projeto:
+
+- `data/raw/mapa_osc_base.csv`
+- `data/raw/mapa_osc_dicionario.xlsx`
+- `data/raw/transferegov/siconv_pagamento.csv`
+- opcionalmente, outras bases complementares de transferencias publicas
+
+Saidas geradas pelo pipeline incluem, entre outras:
+
+- `cadastro_mestre_oscs`
+- `pagamentos_transferegov_padronizados`
+- `base_financiamento_publico_oscs_transferegov`
+- `financiamento_publico_por_uf`
+- `financiamento_publico_por_municipio`
+- `financiamento_publico_por_area`
+- `concentracao_recursos_por_osc`
+
+---
+
 # Executando o pipeline
 
-Instalar dependências:
+Instalar dependencias:
+
+```bash
 pip install -r requirements.txt
+```
 
 Executar pipeline:
-python src/pipeline.py
+
+```bash
+python -m src.pipeline
+```
 
 Executar dashboard:
 
+```bash
 streamlit run dashboard/app.py
-
-
----
-
-# Reprodutibilidade científica
-
-Todos os scripts de coleta, tratamento e integração de dados estão documentados neste repositório.
-
-O pipeline foi desenvolvido para permitir a reprodução completa das análises realizadas no projeto.
+```
 
 ---
 
-# DOI e preservação digital
+# Dashboard
 
-As verssões estáveis deste repositório são arquivadas automaticamente no Zenodo.
+O dashboard Streamlit utiliza prioritariamente os arquivos gerados em `data/processed/`. Para a demonstracao publica do painel, o repositorio tambem inclui um bundle leve em `dashboard/data/`, contendo agregados consolidados e uma amostra da base integrada.
+
+---
+
+# DOI e preservacao digital
+
+As versoes estaveis deste repositorio sao arquivadas automaticamente no Zenodo.
 
 DOI da release atual:
 
-10.5281/zenodo.19103098
+**10.5281/zenodo.19103098**
 
 ---
 
-# Licença
+# Licenca
 
-Este projeto é distribuído sob licença MIT.
+Este projeto e distribuido sob licenca MIT.
 
 ---
 
-# Como citar este repositório
+# Como citar este repositorio
 
-SILVA, B, R, R, (2026).  
-Infraestrutura analítica para integração de dados sobre financiamento das OSCs no Brasil.  
+Silva, B. R. R. (2026).  
+Infraestrutura analitica para integracao de dados sobre financiamento das OSCs no Brasil.  
 DOI: 10.5281/zenodo.19103098
 
 ---
 
 # Contato
 
-Para dúvidas ou sugestões, entre em contato com oS autores do projeto.
-
-
+Para duvidas ou sugestoes, entre em contato com os autores do projeto.

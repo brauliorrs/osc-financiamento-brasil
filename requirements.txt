@@ -3,6 +3,7 @@ pyarrow
 openpyxl
 requests
 plotly
-streamlit
+streamlit>=1.39,<2
+altair<6
 geopandas
 shapely

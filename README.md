@@ -112,11 +112,15 @@ O pipeline foi desenvolvido para permitir a reprodução completa das análises 
 
 ---
 
-# DOI e preservação digital
+# DOI e preserva????o digital
 
-As versões estáveis deste repositório são arquivadas automaticamente no Zenodo.
+As vers??es est??veis deste reposit??rio s??o arquivadas automaticamente no Zenodo.
 
-Cada release gera um **Digital Object Identifier (DOI)** que pode ser utilizado para citação acadêmica.
+Cada release gera um **Digital Object Identifier (DOI)** que pode ser utilizado para cita????o acad??mica.
+
+DOI da release atual:
+
+**10.5281/zenodo.19103098**
 
 ---
 
@@ -134,7 +138,7 @@ Exemplo:
 
 Autor (Ano).  
 Infraestrutura analítica para integração de dados sobre financiamento das OSCs no Brasil.  
-DOI: XXXXX
+DOI: 10.5281/zenodo.19103098
 
 ---
 

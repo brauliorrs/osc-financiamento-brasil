@@ -11,3 +11,4 @@ for d in [RAW_DIR, INTERIM_DIR, PROCESSED_DIR]:
 
 MAPA_OSC_BASE_URL = "https://mapaosc.ipea.gov.br/download/20260310_MOSC_baseresumida.csv"
 MAPA_OSC_DICIONARIO_URL = "https://mapaosc.ipea.gov.br/arquivos/subitems/4038-dicionario-de-dados-mapa-oscs.xlsx"
+LEI_ROUANET_PROPONENTES_URL = "https://dados.cultura.gov.br/dataset/eab2b6a9-6afa-4b33-affa-96ee5b0981a4/resource/59fb244d-79b2-4c69-9bea-df8b3c7f5c30/download/proponentes.csv"

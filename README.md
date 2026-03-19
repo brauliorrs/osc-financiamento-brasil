@@ -169,12 +169,6 @@ Bibliotecas principais:
 
 ---
 
-## Documentacao complementar
-
-- Projeto de submissao: [docs/projeto_submissao.md](docs/projeto_submissao.md)
-
----
-
 ## DOI e preservacao digital
 
 As versoes estaveis deste repositorio sao arquivadas no Zenodo.

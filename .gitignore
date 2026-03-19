@@ -3,6 +3,7 @@ data/interim/
 data/processed/
 
 .venv/
+private/
 __pycache__/
 *.pyc
 *.log

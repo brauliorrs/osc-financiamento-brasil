@@ -9,6 +9,12 @@ Painel publico: https://osc-financiamento-brasil-fwaqtyjfe9civ3ix83hd4a.streamli
 Repositorio: https://github.com/brauliorrs/osc-financiamento-brasil  
 DOI: https://doi.org/10.5281/zenodo.19103098
 
+## Links do projeto
+
+- Dashboard Streamlit: https://osc-financiamento-brasil-fwaqtyjfe9civ3ix83hd4a.streamlit.app/
+- Reposit??rio GitHub: https://github.com/brauliorrs/osc-financiamento-brasil
+- DOI no Zenodo: 10.5281/zenodo.19103098
+
 ---
 
 ## Estado atual do projeto
@@ -190,6 +196,10 @@ Este projeto e distribuido sob licenca MIT.
 Silva, B. R. R. (2026).  
 Infraestrutura analitica para integracao de dados sobre financiamento das OSCs no Brasil.  
 DOI: 10.5281/zenodo.19103098
+
+Reposit??rio: https://github.com/brauliorrs/osc-financiamento-brasil
+
+Dashboard: https://osc-financiamento-brasil-fwaqtyjfe9civ3ix83hd4a.streamlit.app/
 
 ---
 

@@ -20,6 +20,27 @@ def salvar_csv_parquet(df: pd.DataFrame, nome: str) -> None:
     df.to_parquet(parquet_path, index=False)
 
 
+def selecionar_colunas_cadastro_para_merge(cadastro: pd.DataFrame) -> pd.DataFrame:
+    colunas_prioritarias = [
+        "cnpj",
+        "nome_osc",
+        "uf",
+        "municipio",
+        "codigo_municipio",
+        "natureza_juridica",
+        "situacao_cadastral",
+        "matriz_filial",
+    ]
+    colunas_area = [c for c in cadastro.columns if c.startswith("area_")]
+    colunas = [c for c in colunas_prioritarias if c in cadastro.columns]
+    colunas.extend(colunas_area)
+
+    cadastro_merge = cadastro[colunas].copy()
+    if "cnpj" in cadastro_merge.columns:
+        cadastro_merge = cadastro_merge.drop_duplicates(subset=["cnpj"])
+    return cadastro_merge
+
+
 def main() -> None:
     print("1. Carregando Base Principal do Mapa das OSCs...")
     bruto = carregar_base_mapa_osc()
@@ -65,7 +86,8 @@ def main() -> None:
     base_fin_transferegov = None
     if 'cnpj' in pag.columns:
         print("9. Integrando TransfereGov com cadastro OSC por CNPJ...")
-        base_fin_transferegov = pag.merge(cadastro, on='cnpj', how='left')
+        cadastro_merge = selecionar_colunas_cadastro_para_merge(cadastro)
+        base_fin_transferegov = pag.merge(cadastro_merge, on='cnpj', how='left')
         salvar_csv_parquet(base_fin_transferegov, 'base_financiamento_publico_oscs_transferegov')
     else:
         print(

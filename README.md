@@ -112,15 +112,13 @@ O pipeline foi desenvolvido para permitir a reprodução completa das análises 
 
 ---
 
-# DOI e preserva????o digital
+# DOI e preservação digital
 
-As vers??es est??veis deste reposit??rio s??o arquivadas automaticamente no Zenodo.
-
-Cada release gera um **Digital Object Identifier (DOI)** que pode ser utilizado para cita????o acad??mica.
+As verssões estáveis deste repositório são arquivadas automaticamente no Zenodo.
 
 DOI da release atual:
 
-**10.5281/zenodo.19103098**
+10.5281/zenodo.19103098
 
 ---
 
@@ -132,11 +130,7 @@ Este projeto é distribuído sob licença MIT.
 
 # Como citar este repositório
 
-Utilize o DOI gerado pelo Zenodo.
-
-Exemplo:
-
-Autor (Ano).  
+SILVA, B, R, R, (2026).  
 Infraestrutura analítica para integração de dados sobre financiamento das OSCs no Brasil.  
 DOI: 10.5281/zenodo.19103098
 
@@ -144,6 +138,6 @@ DOI: 10.5281/zenodo.19103098
 
 # Contato
 
-Para dúvidas ou sugestões, entre em contato com os autores do projeto.
+Para dúvidas ou sugestões, entre em contato com oS autores do projeto.
 
 

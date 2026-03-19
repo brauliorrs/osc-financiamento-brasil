@@ -141,8 +141,8 @@ if concentracao is not None:
         concentracao = concentracao[concentracao["uf"].astype(str).isin(uf_sel)]
     top_concentracao = concentracao.head(ranking_limite)
     hover_cols = [c for c in ["nome_osc", "nome_convenente", "uf", "quantidade_pagamentos", "participacao_pct", "participacao_acumulada_pct"] if c in top_concentracao.columns]
-    fig_concentracao = px.bar(top_concentracao, x="valor_pago", y="cnpj", orientation="h", title=f"Top {ranking_limite} OSCs/convenentes por valor pago", hover_data=hover_cols)
-    fig_concentracao.update_layout(yaxis={"categoryorder": "total ascending"})
+    fig_concentracao = px.bar(top_concentracao, x="cnpj", y="valor_pago", title=f"Top {ranking_limite} OSCs/convenentes por valor pago", hover_data=hover_cols)
+    fig_concentracao.update_layout(xaxis={"tickangle": -45})
     st.plotly_chart(fig_concentracao, use_container_width=True)
 
 st.caption(f"Fonte carregada: {fonte}")

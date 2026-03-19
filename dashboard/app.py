@@ -50,15 +50,6 @@ def carregar_base() -> tuple[pd.DataFrame | None, str]:
     return None, ""
 
 
-@st.cache_data(show_spinner=False)
-def carregar_agregado(nome: str) -> pd.DataFrame | None:
-    candidatos = [PROCESSED / nome, PUBLIC_DATA / nome]
-    for caminho in candidatos:
-        if caminho.exists():
-            return pd.read_parquet(caminho)
-    return None
-
-
 st.title("Painel V2.1 - Financiamento publico direto das OSCs")
 
 df, fonte = carregar_base()
@@ -90,18 +81,21 @@ osc_identificadas = df_f["nome_osc"].notna().sum() if "nome_osc" in df_f.columns
 osc_unicas = df_f["cnpj"].dropna().astype(str).nunique() if "cnpj" in df_f.columns else 0
 
 if fonte == DEMO_ARQ.name:
-    st.info("Esta versao publica utiliza uma amostra da base integrada e agregados consolidados para demonstracao do painel.")
+    st.info("Esta versao publica utiliza uma amostra da base integrada para demonstracao do painel. Todos os graficos abaixo obedecem ao mesmo recorte aplicado nos filtros.")
 
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Registros na visualizacao", f"{len(df_f):,}".replace(",", "."))
-col2.metric("Valor pago na amostra", formatar_moeda(valor_total))
+col2.metric("Valor pago no recorte", formatar_moeda(valor_total))
 col3.metric("Pagamentos com OSC identificada", f"{osc_identificadas:,}".replace(",", "."))
 col4.metric("CNPJs unicos", f"{osc_unicas:,}".replace(",", "."))
 
-por_uf = carregar_agregado("financiamento_publico_por_uf.parquet")
-if por_uf is not None:
-    if uf_sel and "uf" in por_uf.columns:
-        por_uf = por_uf[por_uf["uf"].astype(str).isin(uf_sel)]
+if {"uf", "valor_pago"}.issubset(df_f.columns):
+    por_uf = (
+        df_f.groupby("uf", dropna=False)["valor_pago"]
+        .sum(min_count=1)
+        .reset_index()
+        .sort_values("valor_pago", ascending=False)
+    )
     fig_uf = px.bar(por_uf, x="uf", y="valor_pago", title="Valor pago por UF")
     st.plotly_chart(fig_uf, use_container_width=True)
 
@@ -117,31 +111,54 @@ if {"ano", "valor_pago"}.issubset(df_f.columns):
 
 col_esq, col_dir = st.columns(2)
 with col_esq:
-    por_municipio = carregar_agregado("financiamento_publico_por_municipio.parquet")
-    if por_municipio is not None:
-        if uf_sel and "uf" in por_municipio.columns:
-            por_municipio = por_municipio[por_municipio["uf"].astype(str).isin(uf_sel)]
-        top_municipios = por_municipio.head(ranking_limite).copy()
+    if {"municipio", "uf", "valor_pago"}.issubset(df_f.columns):
+        top_municipios = (
+            df_f.groupby(["municipio", "uf"], dropna=False)["valor_pago"]
+            .sum(min_count=1)
+            .reset_index()
+            .sort_values("valor_pago", ascending=False)
+            .head(ranking_limite)
+        )
         top_municipios["rotulo"] = top_municipios["municipio"].astype(str) + " / " + top_municipios["uf"].astype(str)
         fig_municipio = px.bar(top_municipios, x="valor_pago", y="rotulo", orientation="h", title=f"Top {ranking_limite} municipios por valor pago")
         fig_municipio.update_layout(yaxis={"categoryorder": "total ascending"})
         st.plotly_chart(fig_municipio, use_container_width=True)
 
 with col_dir:
-    por_area = carregar_agregado("financiamento_publico_por_area.parquet")
-    if por_area is not None:
-        por_area = por_area.copy()
-        por_area["area"] = por_area["area"].astype(str).str.replace("area_", "", regex=False).str.replace("_", " ", regex=False).str.title()
+    area_cols = [c for c in df_f.columns if c.startswith("area_")]
+    if area_cols and "valor_pago" in df_f.columns:
+        registros_area = []
+        for col in area_cols:
+            marcador = pd.to_numeric(df_f[col], errors="coerce").fillna(0)
+            registros_area.append(
+                {
+                    "area": col.replace("area_", "").replace("_", " ").title(),
+                    "valor_pago": df_f.loc[marcador > 0, "valor_pago"].sum(min_count=1),
+                }
+            )
+        por_area = pd.DataFrame(registros_area).sort_values("valor_pago", ascending=False)
         fig_area = px.bar(por_area, x="area", y="valor_pago", title="Valor pago por area tematica")
         st.plotly_chart(fig_area, use_container_width=True)
 
-concentracao = carregar_agregado("concentracao_recursos_por_osc.parquet")
-if concentracao is not None:
-    if uf_sel and "uf" in concentracao.columns:
-        concentracao = concentracao[concentracao["uf"].astype(str).isin(uf_sel)]
-    top_concentracao = concentracao.head(ranking_limite)
-    hover_cols = [c for c in ["nome_osc", "nome_convenente", "uf", "quantidade_pagamentos", "participacao_pct", "participacao_acumulada_pct"] if c in top_concentracao.columns]
-    fig_concentracao = px.bar(top_concentracao, x="cnpj", y="valor_pago", title=f"Top {ranking_limite} OSCs/convenentes por valor pago", hover_data=hover_cols)
+if {"cnpj", "valor_pago"}.issubset(df_f.columns):
+    chaves = [c for c in ["cnpj", "nome_osc", "nome_convenente", "uf"] if c in df_f.columns]
+    concentracao = (
+        df_f.groupby(chaves, dropna=False)["valor_pago"]
+        .agg(["sum", "size"])
+        .reset_index()
+        .rename(columns={"sum": "valor_pago", "size": "quantidade_pagamentos"})
+        .sort_values("valor_pago", ascending=False)
+        .head(ranking_limite)
+        .reset_index(drop=True)
+    )
+    total_concentracao = concentracao["valor_pago"].sum()
+    if pd.notna(total_concentracao) and total_concentracao != 0:
+        concentracao["participacao_pct"] = concentracao["valor_pago"] / total_concentracao * 100
+    else:
+        concentracao["participacao_pct"] = 0.0
+
+    hover_cols = [c for c in ["nome_osc", "nome_convenente", "uf", "quantidade_pagamentos", "participacao_pct"] if c in concentracao.columns]
+    fig_concentracao = px.bar(concentracao, x="cnpj", y="valor_pago", title=f"Top {ranking_limite} OSCs/convenentes por valor pago", hover_data=hover_cols)
     fig_concentracao.update_layout(xaxis={"tickangle": -45})
     st.plotly_chart(fig_concentracao, use_container_width=True)
 

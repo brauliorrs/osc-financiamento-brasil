@@ -1,88 +1,145 @@
-# Financiamento das Organizações da Sociedade Civil no Brasil
-## Infraestrutura analítica reprodutível para integração de bases, produção de indicadores e visualização interativa
+# OSC Financiamento Brasil
 
-Este repositório apresenta uma infraestrutura analítica reprodutível voltada à integração de bases de dados sobre o financiamento das Organizações da Sociedade Civil (OSCs) no Brasil. O projeto foi desenvolvido para apoiar diagnósticos técnicos, pesquisas empíricas e visualizações públicas sobre transferências públicas, financiamento incentivado e padrões de concentração de recursos no setor.
+**Pipeline e dashboard para análise do financiamento das Organizações da Sociedade Civil no Brasil com dados públicos, Streamlit e DOI.**
 
-A proposta está alinhada ao esforço de construir uma base integrada sobre financiamento das OSCs brasileiras, reduzindo a fragmentação informacional entre sistemas administrativos e ampliando a capacidade de análise territorial, temática e distributiva.
+O **OSC Financiamento Brasil** é uma infraestrutura analítica reprodutível para integrar, padronizar e visualizar bases públicas sobre financiamento das Organizações da Sociedade Civil (OSCs) no Brasil.
 
-Painel público: https://osc-financiamento-brasil-fwaqtyjfe9civ3ix83hd4a.streamlit.app/  
-Repositório: https://github.com/brauliorrs/osc-financiamento-brasil  
-DOI: https://doi.org/10.5281/zenodo.19103098
+O projeto combina engenharia de dados, análise territorial, indicadores temáticos e visualização interativa para apoiar pesquisa, diagnóstico técnico, políticas públicas e inteligência institucional.
+
+- **Painel público:** https://osc-financiamento-brasil-fwaqtyjfe9civ3ix83hd4a.streamlit.app/
+- **Repositório:** https://github.com/brauliorrs/osc-financiamento-brasil
+- **DOI:** https://doi.org/10.5281/zenodo.19103098
+
+---
+
+## Resumo executivo
+
+O projeto integra bases públicas relacionadas ao financiamento das OSCs brasileiras e gera indicadores por território, área temática e concentração de recursos.
+
+**Entrega principal:** pipeline reprodutível + bases derivadas + dashboard público + preservação com DOI  
+**Stack:** Python, pandas, Streamlit, Plotly, pyarrow, geopandas  
+**Uso:** pesquisa aplicada, políticas públicas, diagnóstico institucional, transparência e análise do terceiro setor  
+**Status:** versão operacional com painel público, release arquivada e estrutura preparada para expansão de fontes
+
+---
+
+## Problema
+
+As informações sobre financiamento das Organizações da Sociedade Civil no Brasil estão distribuídas em diferentes sistemas administrativos, bases públicas e formatos institucionais.
+
+Essa fragmentação dificulta:
+
+- identificar padrões territoriais de financiamento;
+- comparar recursos por UF, município e área temática;
+- analisar concentração de valores por organização;
+- cruzar bases de financiamento público e incentivado;
+- produzir diagnósticos reprodutíveis;
+- transformar dados administrativos em inteligência analítica.
+
+O resultado é que existem muitos dados disponíveis, mas pouca integração sistemática para análise pública, científica e institucional.
+
+---
+
+## Solução
+
+O projeto propõe uma infraestrutura analítica que:
+
+1. coleta e organiza bases públicas sobre OSCs e financiamento;
+2. padroniza variáveis, formatos e categorias;
+3. harmoniza identificadores e dimensões territoriais;
+4. integra bases administrativas distintas;
+5. gera indicadores analíticos e agregados;
+6. disponibiliza resultados em dashboard Streamlit;
+7. preserva versões estáveis com DOI.
+
+A proposta não é apenas criar um painel, mas construir uma base técnica reprodutível para pesquisas futuras sobre financiamento, território, desigualdades, concentração de recursos e políticas públicas voltadas ao terceiro setor.
 
 ---
 
 ## Estado atual do projeto
 
-A versão atual do projeto já implementa, em grau operacional, as seguintes entregas:
+A versão atual já implementa:
 
-- padronização do cadastro mestre das OSCs a partir do Mapa das OSCs;
+- cadastro mestre das OSCs a partir do Mapa das OSCs;
 - integração inicial com pagamentos do TransfereGov/SICONV;
-- geração de indicadores de financiamento por UF, município, área temática e concentração de recursos;
-- painel interativo em Streamlit para exploração dos resultados;
-- incorporação inicial de dados da Lei Rouanet na camada de financiamento incentivado;
-- versionamento do código em repositório aberto e arquivamento estável com DOI.
+- camada inicial de financiamento incentivado via Lei Rouanet;
+- indicadores por UF, município, área temática e organização;
+- métricas de concentração de recursos;
+- dashboard público em Streamlit;
+- estrutura modular de pipeline;
+- documentação de execução local;
+- licença MIT;
+- arquivo `CITATION.cff`;
+- release arquivada no Zenodo com DOI.
 
-Essa infraestrutura não deve ser interpretada como etapa final do projeto de pesquisa, mas como demonstração concreta de viabilidade técnica para expansão a novas fontes e aprofundamento analítico.
-
----
-
-## Objetivos
-
-- integrar bases de dados sobre financiamento das OSCs no Brasil;
-- padronizar e harmonizar variáveis provenientes de diferentes sistemas institucionais;
-- produzir indicadores territoriais, temáticos e distributivos de financiamento;
-- disponibilizar visualizações interativas para exploração pública dos dados;
-- garantir reprodutibilidade científica por meio de pipeline versionado e documentado.
+Essa infraestrutura deve ser lida como demonstração concreta de viabilidade técnica e como base para expansão metodológica.
 
 ---
 
-## Arquitetura do pipeline
-
-O pipeline segue uma estrutura modular composta por:
-
-1. ingestão de dados de diferentes fontes institucionais;
-2. padronização de variáveis e formatos;
-3. harmonização semântica de categorias analíticas;
-4. integração das bases;
-5. controle de qualidade e validação;
-6. geração de indicadores e agregados;
-7. visualização interativa e documentação do processo.
-
----
-
-## Fontes atualmente incorporadas
+## Fontes incorporadas
 
 ### Operacionais no pipeline
 
-- Mapa das Organizações da Sociedade Civil (cadastro mestre)
-- TransfereGov / SICONV (pagamentos e vínculo com convenentes)
-- Lei Rouanet (camada inicial a partir da base de proponentes)
+| Fonte | Uso no projeto |
+|---|---|
+| Mapa das OSCs | Cadastro mestre das organizações |
+| TransfereGov / SICONV | Pagamentos e vínculos com convenentes |
+| Lei Rouanet | Camada inicial de financiamento incentivado |
 
 ### Estrutura preparada para expansão
 
-- transferências públicas complementares
-- incentivos fiscais e benefícios tributários
-- investimento social privado
-- demais bases previstas no escopo da pesquisa
+- transferências públicas complementares;
+- incentivos fiscais e benefícios tributários;
+- investimento social privado;
+- bases estaduais e municipais;
+- demais fontes previstas no escopo de pesquisa.
 
 ---
 
 ## Principais saídas analíticas
 
-O pipeline gera, entre outras, as seguintes bases derivadas:
+O pipeline gera bases derivadas e agregados como:
 
-- `cadastro_mestre_oscs`
-- `pagamentos_transferegov_padronizados`
-- `base_financiamento_publico_oscs_transferegov`
-- `financiamento_publico_por_uf`
-- `financiamento_publico_por_municipio`
-- `financiamento_publico_por_area`
-- `concentracao_recursos_por_osc`
-- `lei_rouanet_padronizada`
-- `base_lei_rouanet_oscs`
-- `lei_rouanet_captado_por_uf`
-- `lei_rouanet_captado_por_municipio`
-- `lei_rouanet_concentracao_por_osc`
+- `cadastro_mestre_oscs`;
+- `pagamentos_transferegov_padronizados`;
+- `base_financiamento_publico_oscs_transferegov`;
+- `financiamento_publico_por_uf`;
+- `financiamento_publico_por_municipio`;
+- `financiamento_publico_por_area`;
+- `concentracao_recursos_por_osc`;
+- `lei_rouanet_padronizada`;
+- `base_lei_rouanet_oscs`;
+- `lei_rouanet_captado_por_uf`;
+- `lei_rouanet_captado_por_municipio`;
+- `lei_rouanet_concentracao_por_osc`.
+
+Essas saídas permitem observar distribuição territorial, concentração, áreas de atuação, volume de recursos e vínculos entre bases de financiamento.
+
+---
+
+## Arquitetura do pipeline
+
+```text
+Fontes públicas
+      ↓
+Ingestão de dados
+      ↓
+Padronização de variáveis
+      ↓
+Harmonização territorial e temática
+      ↓
+Integração das bases
+      ↓
+Controle de qualidade
+      ↓
+Geração de indicadores
+      ↓
+Bases derivadas e agregados
+      ↓
+Dashboard Streamlit
+      ↓
+Release e preservação com DOI
+```
 
 ---
 
@@ -90,64 +147,96 @@ O pipeline gera, entre outras, as seguintes bases derivadas:
 
 ```text
 osc-financiamento-brasil/
-|-- data/
-|   |-- raw/
-|   |-- interim/
-|   `-- processed/
-|-- src/
-|   |-- ingestion/
-|   |-- processing/
-|   |-- integration/
-|   |-- analytics/
-|   `-- viz/
-|-- dashboard/
-|   |-- app.py
-|   `-- data/
-|-- docs/
-|-- outputs/
-|-- notebooks/
-|-- tests/
-|-- requirements.txt
-|-- runtime.txt
-|-- README.md
-|-- LICENSE
-`-- CITATION.cff
+├── data/
+│   ├── raw/
+│   ├── interim/
+│   └── processed/
+├── src/
+│   ├── ingestion/
+│   ├── processing/
+│   ├── integration/
+│   ├── analytics/
+│   └── viz/
+├── dashboard/
+│   ├── app.py
+│   └── data/
+├── docs/
+├── outputs/
+├── notebooks/
+├── tests/
+├── requirements.txt
+├── runtime.txt
+├── README.md
+├── LICENSE
+└── CITATION.cff
 ```
+
+---
+
+## Dashboard
+
+O painel público em Streamlit apresenta uma camada leve de exploração dos dados consolidados.
+
+Ele permite visualizar, em formato interativo:
+
+- distribuição territorial dos recursos;
+- indicadores por UF e município;
+- recortes por área temática;
+- concentração de financiamento por OSC;
+- camada inicial de análise da Lei Rouanet;
+- amostras consolidadas da base integrada.
+
+Acesse:
+
+https://osc-financiamento-brasil-fwaqtyjfe9civ3ix83hd4a.streamlit.app/
 
 ---
 
 ## Dados e reprodutibilidade
 
-Por padrão, os diretórios `data/raw`, `data/interim` e `data/processed` não são versionados no GitHub. O repositório público distribui o código, a documentação e os metadados do projeto, mas não inclui automaticamente os arquivos de dados de grande porte utilizados nas análises completas.
+Por padrão, os diretórios `data/raw`, `data/interim` e `data/processed` não são versionados no GitHub.
+
+O repositório público distribui:
+
+- código-fonte;
+- documentação;
+- metadados;
+- dashboard;
+- agregados leves para demonstração;
+- estrutura de reprodutibilidade.
 
 Para reprodução local integral, é necessário disponibilizar os insumos em `data/raw/` e executar o pipeline.
 
-Entradas hoje utilizadas no ambiente local:
+### Entradas esperadas no ambiente local
 
-- `data/raw/mapa_osc_base.csv`
-- `data/raw/mapa_osc_dicionario.xlsx`
-- `data/raw/transferegov/siconv_pagamento.csv`
-- `data/raw/lei_rouanet/proponentes.csv` ou download automático da fonte oficial
+```text
+data/raw/mapa_osc_base.csv
+data/raw/mapa_osc_dicionario.xlsx
+data/raw/transferegov/siconv_pagamento.csv
+data/raw/lei_rouanet/proponentes.csv
+```
+
+A base da Lei Rouanet também pode ser obtida por download automático quando configurada a partir da fonte oficial.
 
 O painel público utiliza um bundle leve em `dashboard/data/`, contendo agregados consolidados e uma amostra da base integrada, suficiente para demonstração institucional e exploração inicial.
 
 ---
 
-## Execução local
+## Como executar localmente
 
-Instalação de dependências:
+### 1. Instalar dependências
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Execução do pipeline:
+### 2. Executar o pipeline
 
 ```bash
 python -m src.pipeline
 ```
 
-Execução do dashboard:
+### 3. Executar o dashboard
 
 ```bash
 streamlit run dashboard/app.py
@@ -157,15 +246,75 @@ streamlit run dashboard/app.py
 
 ## Tecnologias utilizadas
 
-Bibliotecas principais:
+Bibliotecas e ferramentas principais:
 
-- pandas
-- plotly
-- streamlit
-- requests
-- pyarrow
-- geopandas
-- shapely
+- Python;
+- pandas;
+- plotly;
+- streamlit;
+- requests;
+- pyarrow;
+- geopandas;
+- shapely.
+
+---
+
+## O que este projeto demonstra
+
+Este repositório evidencia competências em:
+
+- engenharia de dados aplicada a bases públicas;
+- integração de fontes administrativas heterogêneas;
+- padronização e harmonização de dados;
+- análise territorial e temática;
+- construção de indicadores de concentração;
+- dashboards analíticos com Streamlit;
+- documentação técnica e científica;
+- reprodutibilidade de pesquisa;
+- preservação digital com DOI;
+- transformação de dados públicos em inteligência institucional.
+
+---
+
+## Roadmap
+
+### Concluído ou em funcionamento
+
+- Cadastro mestre das OSCs
+- Integração inicial com TransfereGov/SICONV
+- Camada inicial da Lei Rouanet
+- Indicadores territoriais e temáticos
+- Dashboard público em Streamlit
+- Estrutura modular de pipeline
+- Release arquivada no Zenodo
+- DOI público
+
+### Próximas etapas
+
+- Ampliar integração com novas bases de financiamento público
+- Melhorar validações automáticas de consistência
+- Expandir indicadores por área temática e território
+- Incluir novas camadas de financiamento incentivado
+- Documentar metodologia em arquivos específicos em `docs/`
+- Criar relatórios analíticos exportáveis
+- Ampliar testes automatizados do pipeline
+
+---
+
+## Limitações
+
+O projeto trabalha com bases públicas que podem apresentar limitações de completude, atualização, padronização e disponibilidade.
+
+Entre as limitações esperadas estão:
+
+- diferenças de formato entre fontes;
+- ausência de identificadores uniformes;
+- dados administrativos incompletos;
+- alterações em bases públicas de origem;
+- necessidade de tratamento manual em casos específicos;
+- distinção entre dados disponíveis e universo total de financiamento das OSCs.
+
+Essas limitações são tratadas como parte do desafio metodológico do projeto.
 
 ---
 
@@ -177,22 +326,30 @@ DOI da release atual:
 
 **10.5281/zenodo.19103098**
 
----
+Link:
 
-## Licença
-
-Este projeto é distribuído sob licença MIT.
+https://doi.org/10.5281/zenodo.19103098
 
 ---
 
-## Como citar este repositório
+## Como citar
 
 Silva, B. R. R. (2026).  
-Infraestrutura analítica para integração de dados sobre financiamento das OSCs no Brasil.  
+**Infraestrutura analítica para integração de dados sobre financiamento das OSCs no Brasil.**  
 DOI: 10.5281/zenodo.19103098
 
 ---
 
-## Contato
+## Licença
 
-Para dúvidas, sugestões ou colaborações, entre em contato com os autores do projeto.
+Este projeto é distribuído sob licença MIT. Consulte o arquivo `LICENSE`.
+
+---
+
+## Autor
+
+**Bráulio Roberto Rangel da Silva**
+
+Pesquisador e desenvolvedor com atuação em dados públicos, automação, observatórios digitais, pesquisa aplicada e produtos digitais.
+
+GitHub: [@brauliorrs](https://github.com/brauliorrs)
